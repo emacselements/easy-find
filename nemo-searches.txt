@@ -24,4 +24,4 @@
 
 # CLEAN UP
 
-*. mp3 | *.html | *.jpg | *.m3u | *.nfo | *.nzb | *.par2 | *.sfv | *.srr | *.txt | *.url | abusefile |
+*. mp3 | *.html | *.jpg | *.m3u | *.nfo | *.nzb | *.par2 | *.sfv | *.srr | *.txt | *.url |
