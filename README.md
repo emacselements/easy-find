@@ -56,7 +56,7 @@ Example patterns:
 
 ## Video
 
-[A brief video on easy-find](https://youtu.be/wUh-d4a16r4)
+[Watch a video on easy-find](https://youtu.be/wUh-d4a16r4)
 
 ## Requirements
 
