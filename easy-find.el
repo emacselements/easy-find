@@ -7,6 +7,7 @@
 ;; Simple file searching functionality
 ;;; Code:
 
+;; easy-find.el - Simple file searching like Nemo
 (defun easy-find-convert-pattern (pattern &optional case-sensitive)
   "Convert a pipe-delimited file pattern to find arguments.
 Ensures only files (not directories) are matched.
@@ -37,9 +38,9 @@ If CASE-SENSITIVE is nil, perform case-insensitive search."
    (list (read-directory-name "Directory: " nil default-directory t)
          (read-string "File pattern (use | as separator): ")
          (y-or-n-p "Case sensitive? ")))
-  (let ((find-args (easy-find-convert-pattern pattern case-sensitive)))
+  (let ((find-arguments (easy-find-convert-pattern pattern case-sensitive)))
     ;; Run the find command
-    (find-dired directory find-args)
+    (find-dired directory find-arguments)
     ;; Setup to hide details after find finishes
     (with-current-buffer "*Find*"
       ;; Add a one-time hook to hide details when this specific find process finishes
@@ -109,3 +110,4 @@ If CASE-SENSITIVE is nil, perform case-insensitive search."
 
 (provide 'easy-find)
 
+;;; easy-find.el ends here
