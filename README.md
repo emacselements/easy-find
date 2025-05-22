@@ -54,6 +54,10 @@ Example patterns:
 - Clean dired display with hidden details
 - Predefined searches for common file types
 
+## Video
+
+[A brief video on easy-find](https://youtu.be/wUh-d4a16r4)
+
 ## Requirements
 
 - Emacs 24.1+
