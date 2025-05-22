@@ -5,10 +5,10 @@ Simple searching for files in Emacs, inspired by Nemo file manager.
 ## Description
 
 `easy-find` provides a convenient interface for searching types of
-files in directories and sub-directories using pipe-delimited
-patterns, similar to how Nemo handles file searches. Results are
-displayed in dired buffers with details hidden for cleaner viewing.
-Great for file management.
+files in directories and subdirectories using pipe-delimited patterns,
+similar to how Nemo handles file searches. Results are displayed in
+dired buffers with details hidden for cleaner viewing. Great for file
+management.
 
 ## Installation
 
