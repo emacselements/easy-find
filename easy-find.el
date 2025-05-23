@@ -11,7 +11,7 @@
 
 ;; Easy-find provides simple file searching functionality similar to Nemo file manager.
 ;; It allows searching for files using pipe-delimited patterns with case-sensitive
-;; or case-insensitive matching. Results are displayed in dired with details hidden.
+;; or case-insensitive matching. Results are displayed in Dired with details hidden.
 ;; 
 ;; Main functions:
 ;; - easy-find: Interactive file search with custom patterns
@@ -19,10 +19,8 @@
 
 ;;; Code:
 
-;; easy-find.el - Simple file searching like Nemo
 (defun easy-find-convert-pattern (pattern &optional case-sensitive)
-  "Convert a pipe-delimited file pattern to find arguments.
-Ensures only files (not directories) are matched.
+  "Convert a pipe-delimited file PATTERN to find arguments.
 If CASE-SENSITIVE is nil, use case-insensitive matching."
   (let* ((patterns (split-string pattern "|" t "[ \t\n]+"))
          (patterns (mapcar 'string-trim patterns))
@@ -36,14 +34,14 @@ If CASE-SENSITIVE is nil, use case-insensitive matching."
     find-args))
 
 (defun easy-find-hide-details ()
-  "Force hide details in the current dired buffer."
+  "Force hide details in the current Dired buffer."
   (when (derived-mode-p 'dired-mode)
     (if (fboundp 'dired-hide-details-mode)
         (dired-hide-details-mode 1)
       (message "dired-hide-details-mode not available"))))
 
 (defun easy-find (directory pattern &optional case-sensitive)
-  "Search for files using pipe-delimited pattern like Nemo.
+  "Search for files using pipe-delimited PATTERN in DIRECTORY.
 Only matches files, not directories.
 If CASE-SENSITIVE is nil, perform case-insensitive search."
   (interactive
