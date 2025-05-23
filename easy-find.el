@@ -1,10 +1,22 @@
 ;;; easy-find.el --- Simple file searching like Nemo -*- lexical-binding: t -*-
-;;; Author: Raoul Comninos
-;;; Version: 1.0
-;;; Created: 2025-05-22
-;;; Package-Requires: ((emacs "24.1"))
+
+;; Author: Raoul Comninos
+;; Version: 1.0
+;; Created: 2025-05-22
+;; URL: https://gitlab.com/gnarledgrip/easy-find
+;; Package-Requires: ((emacs "24.1"))
+;; Keywords: files, convenience, tools
+
 ;;; Commentary:
-;; Simple file searching functionality
+
+;; Easy-find provides simple file searching functionality similar to Nemo file manager.
+;; It allows searching for files using pipe-delimited patterns with case-sensitive
+;; or case-insensitive matching. Results are displayed in dired with details hidden.
+;; 
+;; Main functions:
+;; - easy-find: Interactive file search with custom patterns
+;; - Predefined searches for common file types (videos, images, documents, etc.)
+
 ;;; Code:
 
 ;; easy-find.el - Simple file searching like Nemo
