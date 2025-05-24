@@ -104,9 +104,14 @@ If CASE-SENSITIVE is nil, perform case-insensitive search."
   (easy-find directory "*.md"))
 
 (defun easy-find-elc (directory)
-  "Find markdown files in DIRECTORY."
-  (interactive "DFind markdown files in directory: ")
+  "Find compiled Emacs Lisp files in DIRECTORY."
+  (interactive "DFind compiled elisp files in directory: ")
   (easy-find directory "*.elc"))
+
+(defun easy-find-backups (directory)
+  "Find Emacs backup and autosave files in DIRECTORY."
+  (interactive "DFind backup files in directory: ")
+  (easy-find directory "*~|#*#"))
 
 (defun easy-find-audio (directory)
   "Find audio files in DIRECTORY."
