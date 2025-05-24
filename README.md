@@ -4,10 +4,10 @@ Simple searching for files in Emacs, inspired by Nemo file manager.
 
 ## Description
 
-`easy-find` provides a convenient interface for searching types of
+`easy-find` provides a convenient interface for searching for types of
 files in directories and subdirectories using pipe-delimited patterns,
 similar to how Nemo handles file searches. Results are displayed in
-dired buffers with details hidden for cleaner viewing. Great for file
+Dired buffers with details hidden for cleaner viewing. Great for file
 management.
 
 ## Installation
@@ -27,6 +27,35 @@ management.
 ```
 
 ## Usage
+
+## Nemo-Style Patterns
+For users familiar with Nemo file manager, here is an example of some search patterns for file types:
+
+```
+# VIDEOS
+
+*.mp4 | *.mkv | *.avi | *.mov | *.flv | *.wmv | *.webm | *.vid | *.mpg
+
+# IMAGES
+
+*.jpeg | *.jpg | *.png | *.tif | *.tiff | *.webp
+
+# DOCUMENTS
+
+*.doc | *.docx | *.el | *.md | *.odp | *.odt | *.ods | *.org | *.pdf | *.ppt | *.pptx | *.xlsx
+
+# AUDIO
+
+*.aac | *.flac | *.m4a | *.mp3 | *.ogg | *.wav | *.wma
+
+# COMPRESSED
+
+*.7z | *.bz2 | *.gz | *.par2 | *.rar | *.tar | *.tbz2 | *.tgz | *.xz | *.zip
+
+# CLEAN UP
+
+*.mp3 | *.html | *.jpg | *.m3u | *.nfo | *.nzb | *.par2 | *.sfv | *.srr | *.txt | *.url
+```
 
 ### Basic Search
 `M-x easy-find` - Search for files using pipe-delimited patterns
