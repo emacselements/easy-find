@@ -1,6 +1,7 @@
 # easy-find
 
-Simple searching for files in Emacs, inspired by Nemo file manager.
+Simple searching for files by types in Emacs, inspired by Nemo file
+manager.
 
 ## Description
 
@@ -29,7 +30,8 @@ management.
 ## Usage
 
 ## Nemo-Style Patterns
-For users familiar with Nemo file manager, here is an example of some search patterns for file types:
+For users familiar with the Nemo file manager, here is an example of
+some search patterns for file types:
 
 ```
 # VIDEOS
@@ -65,7 +67,7 @@ Example patterns:
 - `*.jpg|*.png|*.gif` - Find image files
 - `report*|summary*` - Find files starting with "report" or "summary"
 
-### Predefined Search Functions
+### Some Predefined Search Functions
 
 * `easy-find-videos` - Video files
 * `easy-find-images` - Image files  
@@ -96,7 +98,7 @@ Example patterns:
 ## Requirements
 
 - Emacs 24.1+
-- find command (standard on Unix systems)
+- Find command (standard on Unix systems)
 
 ## License
 
