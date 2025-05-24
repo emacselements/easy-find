@@ -103,6 +103,11 @@ If CASE-SENSITIVE is nil, perform case-insensitive search."
   (interactive "DFind markdown files in directory: ")
   (easy-find directory "*.md"))
 
+(defun easy-find-elc (directory)
+  "Find markdown files in DIRECTORY."
+  (interactive "DFind markdown files in directory: ")
+  (easy-find directory "*.elc"))
+
 (defun easy-find-audio (directory)
   "Find audio files in DIRECTORY."
   (interactive "DFind audio files in directory: ")
