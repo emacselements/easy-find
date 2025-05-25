@@ -7,6 +7,21 @@
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: files, convenience, tools
 
+;; This file is part of GNU Emacs.
+;; 
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 ;;; Commentary:
 
 ;; Easy-find provides simple file searching functionality similar to Nemo file manager.
@@ -19,11 +34,45 @@
 
 ;;; Code:
 
+(defvar easy-find-video-extensions
+  '("mp4" "mkv" "m4v" "avi" "mov" "flv" "wmv" "webm" "vid" "mpg" "mpeg" "asf" "f4v")
+  "List of video file extensions.")
+
+(defvar easy-find-image-extensions
+  '("gif" "jpeg" "jpg" "png" "tif" "tiff" "webp" "svg")
+  "List of image file extensions.")
+
+(defvar easy-find-document-extensions
+  '("doc" "docx" "el" "md" "odp" "odt" "ods" "org" "pdf" "ppt" "pptx" "xlsx")
+  "List of document file extensions.")
+
+(defvar easy-find-text-extensions
+  '("md" "org" "txt")
+  "List of text file extensions.")
+
+(defvar easy-find-audio-extensions
+  '("aac" "flac" "m4a" "mp3" "ogg" "wav" "wma")
+  "List of audio file extensions.")
+
+(defvar easy-find-compressed-extensions
+  '("7z" "bz2" "gz" "par2" "rar" "tar" "tbz2" "tgz" "xz" "zip")
+  "List of compressed file extensions.")
+
+(defvar easy-find-cleanup-extensions
+  '("deb" "run" "docx" "zip" "diz" "webp" "url" "gif" "encr" "rm" "mp3" "html" "htm" 
+    "pdf" "png" "jpeg" "jpg" "m3u" "nfo" "exe" "log" "doc" "rar" "nzb" "par" "par2" 
+    "sfv" "srr" "txt" "dat" "xml")
+  "List of file extensions for cleanup operations.")
+
+(defun easy-find-extensions-to-pattern (extensions)
+  "Convert list of EXTENSIONS to pipe-delimited pattern."
+  (mapconcat (lambda (ext) (concat "*." ext)) extensions "|"))
+
 (defun easy-find-convert-pattern (pattern &optional case-sensitive)
   "Convert a pipe-delimited file PATTERN to find arguments.
 If CASE-SENSITIVE is nil, use case-insensitive matching."
   (let* ((patterns (split-string pattern "|" t "[ \t\n]+"))
-         (patterns (mapcar 'string-trim patterns))
+         (patterns (mapcar #'string-trim patterns))
          (name-command (if case-sensitive "-name" "-iname"))
          (find-args (concat "-type f \\( "
                            (mapconcat (lambda (pat)
@@ -66,22 +115,22 @@ If CASE-SENSITIVE is nil, perform case-insensitive search."
 (defun easy-find-videos (directory)
   "Find video files in DIRECTORY."
   (interactive "DFind videos in directory: ")
-  (easy-find directory "*.mp4|*.mkv|*.m4v|*.avi|*.mov|*.flv|*.wmv|*.webm|*.vid|*.mpg|*.mpeg|*.asf|*.f4v"))
+  (easy-find directory (easy-find-extensions-to-pattern easy-find-video-extensions)))
 
 (defun easy-find-images (directory)
   "Find image files in DIRECTORY."
   (interactive "DFind images in directory: ")
-  (easy-find directory "*.gif|*.jpeg|*.jpg|*.png|*.tif|*.tiff|*.webp|*.svg"))
+  (easy-find directory (easy-find-extensions-to-pattern easy-find-image-extensions)))
 
 (defun easy-find-documents (directory)
   "Find document files in DIRECTORY."
   (interactive "DFind documents in directory: ")
-  (easy-find directory "*.doc|*.docx|*.el|*.md|*.odp|*.odt|*.ods|*.org|*.pdf|*.ppt|*.pptx|*.xlsx"))
+  (easy-find directory (easy-find-extensions-to-pattern easy-find-document-extensions)))
 
 (defun easy-find-text (directory)
   "Find text files in DIRECTORY."
   (interactive "DFind text files in directory: ")
-  (easy-find directory "*.md|*.org|*.txt"))
+  (easy-find directory (easy-find-extensions-to-pattern easy-find-text-extensions)))
 
 (defun easy-find-org (directory)
   "Find org files in DIRECTORY."
@@ -116,17 +165,17 @@ If CASE-SENSITIVE is nil, perform case-insensitive search."
 (defun easy-find-audio (directory)
   "Find audio files in DIRECTORY."
   (interactive "DFind audio files in directory: ")
-  (easy-find directory "*.aac|*.flac|*.m4a|*.mp3|*.ogg|*.wav|*.wma"))
+  (easy-find directory (easy-find-extensions-to-pattern easy-find-audio-extensions)))
 
 (defun easy-find-compressed (directory)
   "Find compressed files in DIRECTORY."
   (interactive "DFind compressed files in directory: ")
-  (easy-find directory "*.7z|*.bz2|*.gz|*.par2|*.rar|*.tar|*.tbz2|*.tgz|*.xz|*.zip"))
+  (easy-find directory (easy-find-extensions-to-pattern easy-find-compressed-extensions)))
 
 (defun easy-find-cleanup (directory)
   "Find files to clean up in DIRECTORY."
   (interactive "DFind cleanup files in directory: ")
-  (easy-find directory "*.deb|*.run|*.docx|*.zip|*.diz|*.webp|*.url|*.gif|*.encr|*.rm|*.mp3|*.html|*.htm|*.pdf|*.png|*.jpe?g|*.m3u|*.nfo|*.exe|*.log|*.doc|*.rar|*.nzb|*.par|*.par2|*.sfv|*.srr|*.txt|*.dat|*.xml|*.r[0-9][0-9]" nil))
+  (easy-find directory (easy-find-extensions-to-pattern easy-find-cleanup-extensions) nil))
 
 (provide 'easy-find)
 
