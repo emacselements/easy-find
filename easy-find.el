@@ -34,6 +34,7 @@
 
 ;;; Code:
 
+;;;###autoload
 (defun easy-find-convert-pattern (pattern &optional case-sensitive)
   "Convert a pipe-delimited file PATTERN to find arguments.
 If CASE-SENSITIVE is nil, use case-insensitive matching."
@@ -48,6 +49,7 @@ If CASE-SENSITIVE is nil, use case-insensitive matching."
                            " \\)")))
     find-args))
 
+;;;###autoload
 (defun easy-find-hide-details ()
   "Force hide details in the current Dired buffer."
   (when (derived-mode-p 'dired-mode)
@@ -55,6 +57,7 @@ If CASE-SENSITIVE is nil, use case-insensitive matching."
         (dired-hide-details-mode 1)
       (message "dired-hide-details-mode not available"))))
 
+;;;###autoload
 (defun easy-find (directory pattern &optional case-sensitive)
   "Search for files using pipe-delimited PATTERN in DIRECTORY.
 Only matches files, not directories.
@@ -78,76 +81,91 @@ If CASE-SENSITIVE is nil, perform case-insensitive search."
                (with-current-buffer (process-buffer process)
                  (easy-find-hide-details))))))))))
 
+;;;###autoload
 (defun easy-find-videos (directory)
   "Find video files in DIRECTORY."
   (interactive "DFind videos in directory: ")
   (easy-find directory "*.mp4|*.mkv|*.m4v|*.avi|*.mov|*.flv|*.wmv|*.webm|*.vid|*.mpg|*.mpeg|*.asf|*.f4v"))
 
+;;;###autoload
 (defun easy-find-images (directory)
   "Find image files in DIRECTORY."
   (interactive "DFind images in directory: ")
   (easy-find directory "*.gif|*.jpeg|*.jpg|*.png|*.tif|*.tiff|*.webp|*.svg"))
 
+;;;###autoload
 (defun easy-find-documents (directory)
   "Find document files in DIRECTORY."
   (interactive "DFind documents in directory: ")
   (easy-find directory "*.doc|*.docx|*.el|*.md|*.odp|*.odt|*.ods|*.org|*.pdf|*.ppt|*.pptx|*.xlsx"))
 
+;;;###autoload
 (defun easy-find-text (directory)
   "Find text files in DIRECTORY."
   (interactive "DFind text files in directory: ")
   (easy-find directory "*.md|*.org|*.txt"))
 
+;;;###autoload
 (defun easy-find-org (directory)
   "Find org files in DIRECTORY."
   (interactive "DFind org files in directory: ")
   (easy-find directory "*.org"))
 
+;;;###autoload
 (defun easy-find-pdf (directory)
   "Find PDF files in DIRECTORY."
   (interactive "DFind pdf files in directory: ")
   (easy-find directory "*.pdf"))
 
+;;;###autoload
 (defun easy-find-txt (directory)
   "Find txt files in DIRECTORY."
   (interactive "DFind txt files in directory: ")
   (easy-find directory "*.txt"))
 
+;;;###autoload
 (defun easy-find-md (directory)
   "Find markdown files in DIRECTORY."
   (interactive "DFind markdown files in directory: ")
   (easy-find directory "*.md"))
 
+;;;###autoload
 (defun easy-find-elc (directory)
   "Find compiled Emacs Lisp files in DIRECTORY."
   (interactive "DFind compiled elisp files in directory: ")
   (easy-find directory "*.elc"))
 
+;;;###autoload
 (defun easy-find-backups (directory)
   "Find Emacs backup and autosave files in DIRECTORY."
   (interactive "DFind backup files in directory: ")
   (easy-find directory "*~|#*#"))
 
+;;;###autoload
 (defun easy-find-tilde (directory)
   "Find Emacs backup files in DIRECTORY."
   (interactive "DFind tilde files in directory: ")
   (easy-find directory "*~"))
 
+;;;###autoload
 (defun easy-find-hash (directory)
   "Find Emacs autosave files in DIRECTORY."
   (interactive "DFind hash files in directory: ")
   (easy-find directory "#*#"))
 
+;;;###autoload
 (defun easy-find-audio (directory)
   "Find audio files in DIRECTORY."
   (interactive "DFind audio files in directory: ")
   (easy-find directory "*.aac|*.flac|*.m4a|*.mp3|*.ogg|*.wav|*.wma"))
 
+;;;###autoload
 (defun easy-find-compressed (directory)
   "Find compressed files in DIRECTORY."
   (interactive "DFind compressed files in directory: ")
   (easy-find directory "*.7z|*.bz2|*.gz|*.par2|*.rar|*.tar|*.tbz2|*.tgz|*.xz|*.zip"))
 
+;;;###autoload
 (defun easy-find-cleanup (directory)
   "Find files to clean up in DIRECTORY."
   (interactive "DFind cleanup files in directory: ")
