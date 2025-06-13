@@ -3,7 +3,7 @@
 ;; Author: Raoul Comninos
 ;; Version: 1.0
 ;; Created: 2025-05-22
-;; URL: https://gitlab.com/gnarledgrip/easy-find
+;; URL: https://github.com/gnarledgrip/easy-find
 ;; Package-Requires: ((emacs "24.1"))
 ;; Keywords: files, convenience, tools
 
