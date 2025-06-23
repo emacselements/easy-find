@@ -4,7 +4,7 @@
 ;; Version: 1.0
 ;; Created: 2025-05-22
 ;; URL: https://github.com/gnarledgrip/easy-find
-;; Package-Requires: ((emacs "24.1"))
+;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: files, convenience, tools
 
 ;; This package is free software; you can redistribute it and/or modify
@@ -31,6 +31,8 @@
 ;; - Predefined searches for common file types (videos, images, documents, etc.)
 
 ;;; Code:
+
+(eval-when-compile (require 'subr-x))
 
 ;;;###autoload
 (defun easy-find-convert-pattern (pattern &optional case-sensitive)
