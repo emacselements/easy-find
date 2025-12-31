@@ -60,23 +60,34 @@ some search patterns for file types:
 ```
 
 ### Basic Search
-`M-x easy-find` - Search for files using pipe-delimited patterns
+`M-x easy-find` - Search for files using pipe-delimited patterns (case-insensitive by default)
 
 Example patterns:
 - `*.org|*.md` - Find all org and markdown files
 - `*.jpg|*.png|*.gif` - Find image files
 - `report*|summary*` - Find files starting with "report" or "summary"
 
-### Some Predefined Search Functions
+**Note:** Searches are case-insensitive by default. Use `C-u M-x easy-find` for case-sensitive search.
+
+### Size-Based Search Functions
+
+* `easy-find-big` - Find files larger than specified size (default: > 100MB)
+* `easy-find-huge` - Find exceptionally large files (default: > 1GB)
+
+### File Type Search Functions
 
 * `easy-find-videos` - Video files
-* `easy-find-images` - Image files  
+* `easy-find-images` - Image files
+* `easy-find-thumbnails` - Thumbnail cache files
 * `easy-find-documents` - Document files
 * `easy-find-text` - Text files (md, org, txt)
+* `easy-find-scripts` - Script files (sh, py, pl, rb, lua, js, php)
 * `easy-find-org` - Org mode files
 * `easy-find-pdf` - PDF files
 * `easy-find-txt` - Text files
 * `easy-find-md` - Markdown files
+* `easy-find-elc` - Compiled Emacs Lisp files
+* `easy-find-backups` - Emacs backup and autosave files
 * `easy-find-audio` - Audio files
 * `easy-find-compressed` - Archive files
 * `easy-find-cleanup` - Various file types for cleanup
@@ -84,10 +95,12 @@ Example patterns:
 ## Features
 
 - Pipe-delimited search patterns (`*.ext1|*.ext2`)
-- Case-sensitive and case-insensitive searching
+- Case-insensitive searching by default (use `C-u` prefix for case-sensitive)
+- Size-based searching (small, big, huge files)
 - Files only (directories excluded)
-- Searches subdirectories
+- Searches subdirectories recursively
 - Clean dired display with hidden details
+- File count display with proper pluralization
 - Predefined searches for common file types
 - Easy to customize
 
