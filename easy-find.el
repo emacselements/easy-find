@@ -23,11 +23,13 @@
 ;;; Commentary:
 
 ;; Easy-find provides simple file searching functionality similar to Nemo file manager.
-;; It allows searching for files using pipe-delimited patterns with case-sensitive
-;; or case-insensitive matching. Results are displayed in Dired with details hidden.
-;; 
+;; It allows searching for files using pipe-delimited patterns with case-insensitive
+;; matching by default. Results are displayed in Dired with details hidden.
+;;
 ;; Main functions:
-;; - easy-find: Interactive file search with custom patterns
+;; - easy-find: Interactive file search with custom patterns (case-insensitive by default)
+;; - easy-find-big: Find files larger than a specified size (default 10MB)
+;; - easy-find-huge: Find exceptionally large files (default 1GB)
 ;; - Predefined searches for common file types (videos, images, documents, etc.)
 
 ;;; Code:
@@ -61,12 +63,15 @@ If CASE-SENSITIVE is nil, use case-insensitive matching."
 (defun easy-find (directory pattern &optional case-sensitive)
   "Search for files using pipe-delimited PATTERN in DIRECTORY.
 Only matches files, not directories.
-If CASE-SENSITIVE is nil, perform case-insensitive search."
+By default, search is case-insensitive.
+With prefix argument (C-u), perform case-sensitive search."
   (interactive
    (list (read-directory-name "Directory: " nil default-directory t)
          (read-string "File pattern (use | as separator): ")
-         (y-or-n-p "Case sensitive? ")))
+         current-prefix-arg))
   (let ((find-arguments (easy-find-convert-pattern pattern case-sensitive)))
+    ;; Show initial message
+    (message "Searching for files in %s..." directory)
     ;; Run the find command
     (find-dired directory find-arguments)
     ;; Setup to hide details after find finishes
@@ -79,7 +84,12 @@ If CASE-SENSITIVE is nil, perform case-insensitive search."
            (lambda (process event)
              (when (string= event "finished\n")
                (with-current-buffer (process-buffer process)
-                 (easy-find-hide-details))))))))))
+                 (easy-find-hide-details)
+                 (let ((file-count (- (count-lines (point-min) (point-max)) 2)))
+                   (when (< file-count 0) (setq file-count 0))
+                   (message "Search complete. Found %d file%s."
+                            file-count
+                            (if (= file-count 1) "" "s"))))))))))))
 
 ;;;###autoload
 (defun easy-find-videos (directory)
@@ -94,6 +104,58 @@ If CASE-SENSITIVE is nil, perform case-insensitive search."
   (easy-find directory "*.gif|*.jpeg|*.jpg|*.png|*.tif|*.tiff|*.webp|*.svg"))
 
 ;;;###autoload
+(defun easy-find-small-images (directory &optional size-kb)
+  "Find small image files in DIRECTORY (likely thumbnails).
+SIZE-KB is the maximum file size in kilobytes. Defaults to 100KB."
+  (interactive
+   (list (read-directory-name "Find small images in directory: " nil default-directory t)
+         (let ((input (read-string "Maximum size in KB (default 100): " nil nil "100")))
+           (string-to-number input))))
+  (let* ((size-kb (or size-kb 100))
+         ;; Convert KB to bytes: 1 KB = 1024 bytes
+         (bytes (* size-kb 1024))
+         (find-arguments (format "-type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.gif' -o -iname '*.webp' \\) -size -%dc" bytes)))
+    (message "Searching for image files smaller than %d KB in %s..." size-kb directory)
+    (find-dired directory find-arguments)
+    (with-current-buffer "*Find*"
+      (let ((proc (get-buffer-process (current-buffer))))
+        (when proc
+          (set-process-sentinel
+           proc
+           (lambda (process event)
+             (when (string= event "finished\n")
+               (with-current-buffer (process-buffer process)
+                 (easy-find-hide-details)
+                 (let ((file-count (- (count-lines (point-min) (point-max)) 2)))
+                   (when (< file-count 0) (setq file-count 0))
+                   (message "Search complete. Found %d small image%s."
+                            file-count
+                            (if (= file-count 1) "" "s"))))))))))))
+
+;;;###autoload
+(defun easy-find-thumbnails (directory)
+  "Find actual thumbnail cache files in DIRECTORY.
+Searches .thumbnails cache directories and common thumbnail locations."
+  (interactive "DFind thumbnails in directory: ")
+  (let* ((find-arguments "-type f \\( -path '*/.thumbnails/*' -o -path '*/.cache/thumbnails/*' -o -path '*/thumbs.db' -o -path '*/Thumbs.db' \\)"))
+    (message "Searching for thumbnail files in %s..." directory)
+    (find-dired directory find-arguments)
+    (with-current-buffer "*Find*"
+      (let ((proc (get-buffer-process (current-buffer))))
+        (when proc
+          (set-process-sentinel
+           proc
+           (lambda (process event)
+             (when (string= event "finished\n")
+               (with-current-buffer (process-buffer process)
+                 (easy-find-hide-details)
+                 (let ((file-count (- (count-lines (point-min) (point-max)) 2)))
+                   (when (< file-count 0) (setq file-count 0))
+                   (message "Search complete. Found %d thumbnail file%s."
+                            file-count
+                            (if (= file-count 1) "" "s"))))))))))))
+
+;;;###autoload
 (defun easy-find-documents (directory)
   "Find document files in DIRECTORY."
   (interactive "DFind documents in directory: ")
@@ -104,6 +166,12 @@ If CASE-SENSITIVE is nil, perform case-insensitive search."
   "Find text files in DIRECTORY."
   (interactive "DFind text files in directory: ")
   (easy-find directory "*.md|*.org|*.txt"))
+
+;;;###autoload
+(defun easy-find-scripts (directory)
+  "Find script files in DIRECTORY."
+  (interactive "DFind script files in directory: ")
+  (easy-find directory "*.sh|*.bash|*.zsh|*.py|*.pl|*.rb|*.lua|*.js|*.php"))
 
 ;;;###autoload
 (defun easy-find-org (directory)
@@ -164,6 +232,66 @@ If CASE-SENSITIVE is nil, perform case-insensitive search."
   "Find compressed files in DIRECTORY."
   (interactive "DFind compressed files in directory: ")
   (easy-find directory "*.7z|*.bz2|*.gz|*.par2|*.rar|*.tar|*.tbz2|*.tgz|*.xz|*.zip"))
+
+;;;###autoload
+(defun easy-find-big (directory &optional size-mb)
+  "Find files larger than SIZE-MB megabytes in DIRECTORY and subdirectories.
+If SIZE-MB is not provided, defaults to 10 megabytes."
+  (interactive
+   (list (read-directory-name "Find large files in directory: " nil default-directory t)
+         (let ((input (read-string "Minimum size in MB (default 10): " nil nil "10")))
+           (string-to-number input))))
+  (let* ((size-mb (or size-mb 10))
+         ;; Convert MB to bytes: 1 MB = 1024 * 1024 bytes
+         (bytes (* size-mb 1024 1024))
+         (find-arguments (format "-type f -size +%dc" bytes)))
+    (message "Searching for files larger than %d MB in %s..." size-mb directory)
+    (find-dired directory find-arguments)
+    (with-current-buffer "*Find*"
+      (let ((proc (get-buffer-process (current-buffer))))
+        (when proc
+          (set-process-sentinel
+           proc
+           (lambda (process event)
+             (when (string= event "finished\n")
+               (with-current-buffer (process-buffer process)
+                 (easy-find-hide-details)
+                 (let ((file-count (- (count-lines (point-min) (point-max)) 2)))
+                   (when (< file-count 0) (setq file-count 0))
+                   (message "Search complete. Found %d file%s larger than %d MB."
+                            file-count
+                            (if (= file-count 1) "" "s")
+                            size-mb)))))))))))
+
+;;;###autoload
+(defun easy-find-huge (directory &optional size-gb)
+  "Find exceptionally large files in DIRECTORY and subdirectories.
+SIZE-GB is in gigabytes. If not provided, defaults to 1 gigabyte."
+  (interactive
+   (list (read-directory-name "Find huge files in directory: " nil default-directory t)
+         (let ((input (read-string "Minimum size in GB (default 1): " nil nil "1")))
+           (string-to-number input))))
+  (let* ((size-gb (or size-gb 1))
+         ;; Convert GB to bytes: 1 GB = 1024 * 1024 * 1024 bytes
+         (bytes (* size-gb 1024 1024 1024))
+         (find-arguments (format "-type f -size +%dc" bytes)))
+    (message "Searching for files larger than %d GB in %s..." size-gb directory)
+    (find-dired directory find-arguments)
+    (with-current-buffer "*Find*"
+      (let ((proc (get-buffer-process (current-buffer))))
+        (when proc
+          (set-process-sentinel
+           proc
+           (lambda (process event)
+             (when (string= event "finished\n")
+               (with-current-buffer (process-buffer process)
+                 (easy-find-hide-details)
+                 (let ((file-count (- (count-lines (point-min) (point-max)) 2)))
+                   (when (< file-count 0) (setq file-count 0))
+                   (message "Search complete. Found %d file%s larger than %d GB."
+                            file-count
+                            (if (= file-count 1) "" "s")
+                            size-gb)))))))))))
 
 ;;;###autoload
 (defun easy-find-cleanup (directory)
